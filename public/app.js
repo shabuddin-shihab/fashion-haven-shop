@@ -161,6 +161,13 @@ function init() {
   }
   saveCart(); loadSite(); loadProducts(); renderCart();
   $('#searchInput')?.addEventListener('input', renderProducts);
-  if (user) { /* profile link added below */ }
+
+  // Profile dropdown: click to open/close
+  const pa = document.getElementById('profileAnchor');
+  pa?.addEventListener('click', e => { e.stopPropagation(); document.getElementById('profileDrop').classList.toggle('show'); });
+  document.addEventListener('click', () => document.getElementById('profileDrop')?.classList.remove('show'));
+
+  const pr = document.getElementById('productAnchor');
+  pr?.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); pr.parentElement.querySelector('.dropdown').classList.toggle('show'); });
 }
 init();
