@@ -1,0 +1,65 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Super Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; font-family: 'Poppins', sans-serif; }
+body { min-height: 100vh; background: linear-gradient(135deg, #000, #1e293b); display: flex; align-items: center; justify-content: center; }
+.card { background: #0f172a; border: 1px solid #c9a227; color: #e2e8f0; width: 420px; padding: 40px; border-radius: 20px; box-shadow: 0 0 40px rgba(201,162,39,.25); }
+h2 { color: #c9a227; margin-bottom: 4px; }
+p.sub { color: #64748b; font-size: 13px; margin-bottom: 22px; }
+label { font-size: 13px; color: #94a3b8; }
+input { width: 100%; padding: 13px; margin: 6px 0 14px; background: #1e293b; border: 1px solid #334155; border-radius: 10px; color: #fff; }
+.btn { width: 100%; background: linear-gradient(145deg, #c9a227, #a8841a); color: #fff; border: none; padding: 14px; border-radius: 12px; font-weight: 700; cursor: pointer; box-shadow: 0 5px 0 #7a6312; }
+.btn:active { transform: translateY(4px); box-shadow: none; }
+a { color: #c9a227; font-size: 13px; cursor: pointer; text-decoration: none; }
+.err { background: #7f1d1d33; color: #fca5a5; padding: 10px; border-radius: 8px; margin-bottom: 12px; display: none; font-size: 14px; }
+.ok { background: #14532d33; color: #86efac; padding: 10px; border-radius: 8px; margin-bottom: 12px; display: none; font-size: 14px; }
+</style></head>
+<body>
+<div class="card">
+  <h2>👑 SUPER ADMIN</h2>
+  <p class="sub">Restricted access — authorized only</p>
+  <div class="err" id="err"></div>
+  <div class="ok" id="ok"></div>
+
+  <form id="loginF">
+    <label>Email</label><input id="email" type="email" required>
+    <label>Password</label><input id="password" type="password" required>
+    <button class="btn">ENTER SUPER PANEL</button>
+  </form>
+
+  <form id="forgotF" style="display:none">
+    <label>Email</label><input id="fEmail" type="email" required>
+    <label>New Password</label><input id="fPass" type="password" required>
+    <button class="btn">RESET PASSWORD</button>
+  </form>
+
+  <p style="margin-top:14px;display:flex;justify-content:space-between">
+    <a onclick="toggleForgot()">Forgot Password?</a>
+    <a href="/">← Back to Shop</a>
+  </p>
+</div>
+<script>
+function toggleForgot() { forgotF.style.display = forgotF.style.display === 'none' ? '' : 'none'; }
+
+loginF.onsubmit = async e => {
+  e.preventDefault();
+  const res = await fetch('/api/login', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email: email.value, password: password.value }) });
+  const data = await res.json();
+  if (res.ok && data.user.role === 'superadmin') {
+    localStorage.setItem('token', data.token);
+    localStorage.setItem('user', JSON.stringify(data.user));
+    location.href = '/admin.html';
+  } else { err.textContent = 'Super Admin access only'; err.style.display = 'block'; }
+};
+
+forgotF.onsubmit = async e => {
+  e.preventDefault();
+  const res = await fetch('/api/forgot', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email: fEmail.value, password: fPass.value }) });
+  const data = await res.json();
+  if (data.ok) { ok.textContent = 'Password reset! Please login.'; ok.style.display = 'block'; forgotF.style.display = 'none'; }
+  else { err.textContent = data.error; err.style.display = 'block'; }
+};
+</script>
+</body></html>

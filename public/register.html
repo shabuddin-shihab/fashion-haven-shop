@@ -1,0 +1,70 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Signup — Fashion Haven</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; font-family: 'Poppins', sans-serif; }
+body { min-height: 100vh; background: linear-gradient(135deg, #0f172a, #1e293b); display: flex; align-items: center; justify-content: center; padding: 20px; }
+.card { background: #fff; width: 440px; padding: 40px; border-radius: 20px; box-shadow: 0 20px 0 #00000030, 0 30px 60px rgba(0,0,0,.5); }
+h2 { color: #0f172a; margin-bottom: 4px; font-size: 28px; }
+p.sub { color: #94a3b8; margin-bottom: 20px; font-size: 14px; }
+label { font-size: 13px; color: #64748b; font-weight: 600; }
+input { width: 100%; padding: 13px; margin: 6px 0 14px; border: 2px solid #e2e8f0; border-radius: 10px; }
+input:focus { border-color: #c9a227; outline: none; box-shadow: 0 0 0 4px rgba(201,162,39,.15); }
+.btn { width: 100%; background: linear-gradient(145deg, #c9a227, #a8841a); color: #fff; border: none; padding: 14px; border-radius: 12px; font-weight: 700; font-size: 16px; cursor: pointer; box-shadow: 0 5px 0 #7a6312; }
+.btn:active { transform: translateY(4px); box-shadow: none; }
+.social { display: flex; gap: 10px; margin-bottom: 18px; }
+.social button { flex: 1; padding: 12px; border-radius: 12px; border: 2px solid #e2e8f0; background: #fff; font-weight: 600; cursor: pointer; }
+.social button:hover { border-color: #c9a227; }
+.divider { text-align: center; color: #cbd5e1; margin-bottom: 16px; font-size: 13px; }
+.err { background: #fee2e2; color: #b91c1c; padding: 10px; border-radius: 8px; margin-bottom: 12px; display: none; font-size: 14px; }
+.ok { background: #dcfce7; color: #15803d; padding: 10px; border-radius: 8px; margin-bottom: 12px; display: none; font-size: 14px; }
+a { color: #c9a227; text-decoration: none; font-weight: 600; }
+.links { margin-top: 16px; display: flex; justify-content: space-between; font-size: 14px; }
+</style></head>
+<body>
+<div class="card">
+  <h2>✨ Signup</h2>
+  <p class="sub">Create your Fashion Haven account</p>
+  <div class="err" id="err"></div>
+  <div class="ok" id="ok"></div>
+
+  <div class="social">
+    <button onclick="social('google')">🔵 Google</button>
+    <button onclick="social('facebook')">📘 Facebook</button>
+  </div>
+  <div class="divider">— or signup with email —</div>
+
+  <form id="f">
+    <label>Full Name</label>
+    <input id="name" placeholder="Your Name" required>
+    <label>Email Address</label>
+    <input id="email" type="email" placeholder="you@gmail.com" required>
+    <label>Password</label>
+    <input id="password" type="password" placeholder="Min 6 characters" minlength="6" required>
+    <button class="btn">SIGNUP</button>
+  </form>
+  <div class="links">
+    <a href="/login.html">Already have an account?</a>
+    <a href="/">← Back to Shop</a>
+  </div>
+</div>
+<script>
+async function social(provider) {
+  const name = prompt(`Enter your name for ${provider} signup:`);
+  const email = prompt(`Enter your ${provider} email:`);
+  if (!name || !email) return;
+  const res = await fetch('/api/social', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ provider, name, email }) });
+  const data = await res.json();
+  if (data.token) { localStorage.setItem('token', data.token); localStorage.setItem('user', JSON.stringify(data.user)); location.href = '/'; }
+}
+
+f.onsubmit = async e => {
+  e.preventDefault();
+  const res = await fetch('/api/register', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name: name.value, email: email.value, password: password.value, role: 'user' }) });
+  const data = await res.json();
+  if (data.ok) { ok.textContent = 'Account created! Redirecting to login...'; ok.style.display = 'block'; setTimeout(() => location.href = '/login.html', 1200); }
+  else { err.textContent = data.error; err.style.display = 'block'; }
+};
+</script>
+</body></html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Manage My Account</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; font-family: 'Poppins', sans-serif; }
+body { background: #f1f5f9; }
+nav { background: #0f172a; color: #fff; padding: 14px 40px; display: flex; justify-content: space-between; align-items: center; }
+nav a { color: #c9a227; text-decoration: none; font-weight: 600; }
+.wrap { max-width: 1050px; margin: 26px auto; display: grid; grid-template-columns: 260px 1fr; gap: 20px; padding: 0 16px; }
+.side { background: #fff; border-radius: 16px; padding: 22px; text-align: center; box-shadow: 0 8px 24px rgba(0,0,0,.06); }
+.avatar { width: 110px; height: 110px; border-radius: 50%; object-fit: cover; border: 4px solid #c9a227; }
+.side h3 { margin: 12px 0 4px; }
+.side .vbadge { background: #dcfce7; color: #15803d; padding: 3px 12px; border-radius: 20px; font-size: 12px; }
+.side button { width: 100%; margin-top: 10px; padding: 10px; border: none; border-radius: 10px; background: #f1f5f9; cursor: pointer; font-weight: 600; text-align: left; color: #334155; }
+.side button:hover, .side button.active { background: #c9a227; color: #fff; }
+.upload { display: inline-block; margin-top: 10px; font-size: 12px; color: #a8841a; cursor: pointer; text-decoration: underline; }
+.main { background: #fff; border-radius: 16px; padding: 26px; box-shadow: 0 8px 24px rgba(0,0,0,.06); }
+.tab { display: none; } .tab.active { display: block; }
+h2 { margin-bottom: 16px; }
+h4 { margin: 18px 0 8px; color: #c9a227; border-left: 4px solid #c9a227; padding-left: 8px; }
+label { font-size: 12px; color: #64748b; font-weight: 600; text-transform: uppercase; }
+input, select { width: 100%; padding: 11px; margin: 6px 0 12px; border: 1px solid #e2e8f0; border-radius: 8px; background: #f8fafc; }
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+button.act { background: #c9a227; color: #fff; border: none; padding: 11px 20px; border-radius: 10px; cursor: pointer; font-weight: 600; box-shadow: 0 4px 0 #7a6312; }
+button.act:active { transform: translateY(3px); box-shadow: none; }
+table { width: 100%; border-collapse: collapse; margin-top: 14px; }
+th, td { padding: 11px; border-bottom: 1px solid #e2e8f0; text-align: left; }
+th { color: #94a3b8; font-size: 12px; text-transform: uppercase; }
+.msg { padding: 10px; border-radius: 8px; margin: 8px 0; display: none; }
+iframe { width: 100%; height: 230px; border: 0; border-radius: 12px; margin-top: 8px; }
+.badge { padding: 2px 10px; border-radius: 20px; font-size: 11px; }
+.v { background: #dcfce7; color: #15803d; } .u { background: #fee2e2; color: #b91c1c; }
+@media (max-width: 750px) { .wrap { grid-template-columns: 1fr; } }
+</style></head>
+<body>
+<nav><b>👤 Account</b><a href="/">← Back to Shop</a></nav>
+<div class="wrap">
+
+  <div class="side">
+    <img class="avatar" id="avatarImg" src="https://ui-avatars.com/api/?name=User&background=c9a227&color=fff&size=200">
+    <label class="upload">📷 Change Photo<input type="file" id="avatarFile" accept="image/*" hidden onchange="uploadAvatar()"></label>
+    <h3 id="pName">My Profile</h3>
+    <span class="vbadge" id="pStatus">Verified Account</span>
+    <button class="active" onclick="tab('profile', this)">👤 Manage My Account</button>
+    <button onclick="tab('address', this)">📍 Address Book</button>
+    <button onclick="tab('payment', this)">💳 Payment Options</button>
+    <button onclick="tab('orders', this)">📦 My Orders</button>
+    <button onclick="location.reload() && show('Verification tab is inside Manage My Account')">✉️ Verification</button>
+    <button onclick="logout()">🚪 Logout</button>
+  </div>
+
+  <div class="main">
+    <div class="msg" id="msg"></div>
+
+    <div class="tab active" id="tab-profile">
+      <h2>Personal Profile</h2>
+      <label>Full Name</label><input id="name">
+      <label>Email <span class="badge v" id="emailV" style="display:none">Verified ✓</span><span class="badge u" id="emailU">Not verified</span></label>
+      <input id="email" disabled>
+      <button class="act" onclick="sendCode('email')">📧 Verify Email</button>
+      <label style="margin-top:14px;display:block">Phone <span class="badge v" id="phoneV" style="display:none">Verified ✓</span><span class="badge u" id="phoneU">Not verified</span></label>
+      <input id="phone" placeholder="+8801XXXXXXXXX">
+      <button class="act" onclick="sendCode('phone')">📱 Verify Phone</button>
+      <h4>Verification Code</h4>
+      <div class="row2"><input id="vcode" placeholder="6-digit code"><select id="vtype"><option value="email">Email</option><option value="phone">Phone</option></select></div>
+      <button class="act" onclick="checkCode()">✅ Confirm Code</button>
+      <h4>Marketing Preferences</h4>
+      <label><input type="checkbox" id="sms" style="width:auto"> Receive marketing SMS</label><br>
+      <label><input type="checkbox" id="mail" style="width:auto"> Receive marketing emails</label>
+      <br><button class="act" style="margin-top:14px" onclick="saveProfile()">💾 Save Profile</button>
+    </div>
+
+    <div class="tab" id="tab-address">
+      <h2>Address Book</h2>
+      <label>Full Address</label><input id="address" placeholder="House, Road, Area, City">
+      <div class="row2"><input id="lat" placeholder="Latitude 23.80"><input id="lng" placeholder="Longitude 90.37"></div>
+      <button class="act" onclick="updateMap()">📍 Pin on Map</button>
+      <iframe id="map" loading="lazy"></iframe>
+      <br><button class="act" style="margin-top:14px" onclick="saveProfile()">💾 Save Address</button>
+    </div>
+
+    <div class="tab" id="tab-payment">
+      <h2>Payment Options</h2>
+      <h4>Add Card</h4>
+      <label>Card Number</label><input id="cardNumber" placeholder="1234 5678 9012 3456">
+      <label>Card Holder Name</label><input id="cardHolder" placeholder="Name on card">
+      <div class="row2"><div><label>Expiry Date</label><input id="cardExp" placeholder="MM/YY"></div><div><label>CVV</label><input id="cardCvv" placeholder="123"></div></div>
+      <button class="act" onclick="saveCard()">💳 Save Card</button>
+      <h4>Add Bank Account</h4>
+      <label>Bank Name</label><input id="bankName" placeholder="e.g. DBBL">
+      <label>Account Holder Name</label><input id="bankHolder" placeholder="Holder name">
+      <label>Account Number</label><input id="bankAccount" placeholder="Account number">
+      <button class="act" onclick="saveBank()">🏦 Save Bank</button>
+      <h4>Mobile Banking / PayPal</h4>
+      <select id="paymentType"><option value="">Select...</option><option>bKash</option><option>Nagad</option><option>Rocket</option><option>CellFin</option><option>PayPal</option></select>
+      <div class="row2"><input id="payName" placeholder="Account Name"><input id="payNumber" placeholder="Account Number"></div>
+      <button class="act" onclick="saveProfile()">💾 Save</button>
+    </div>
+
+    <div class="tab" id="tab-orders">
+      <h2>Recent Orders</h2>
+      <table><thead><tr><th>Order #</th><th>Placed On</th><th>Items</th><th>Payment</th><th>Total</th></tr></thead><tbody id="orows"></tbody></table>
+    </div>
+  </div>
+</div>
+<script>
+const token = localStorage.getItem('token');
+if (!token) location.href = '/login.html';
+const H = { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token };
+const $ = id => document.getElementById(id);
+
+function logout() { localStorage.clear(); location.href = '/'; }
+function tab(id, el) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  document.querySelectorAll('.side button').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  if (id === 'orders') loadOrders();
+}
+function show(m, ok) { const el = $('msg'); el.textContent = m; el.style.display = 'block'; el.style.background = ok ? '#dcfce7' : '#fee2e2'; el.style.color = ok ? '#15803d' : '#b91c1c'; }
+
+function uploadAvatar() {
+  const f = $('avatarFile').files[0]; const r = new FileReader();
+  r.onload = async () => { $('avatarImg').src = r.result;
+    await fetch('/api/profile', { method: 'PUT', headers: H, body: JSON.stringify({ avatar: r.result }) });
+    show('Photo updated!', true); };
+  r.readAsDataURL(f);
+}
+
+async function load() {
+  const r = await fetch('/api/profile', { headers: H }); const u = await r.json();
+  $('pName').textContent = u.name;
+  if (u.avatar) $('avatarImg').src = u.avatar;
+  $('name').value = u.name || ''; $('email').value = u.email || ''; $('phone').value = u.phone || '';
+  $('address').value = u.address || ''; $('lat').value = u.lat || ''; $('lng').value = u.lng || '';
+  $('paymentType').value = u.paymentType || ''; $('payName').value = u.payName || ''; $('payNumber').value = u.payNumber || '';
+  if (u.payCard) { cardNumber.value = u.payCard.number || ''; cardHolder.value = u.payCard.holder || ''; cardExp.value = u.payCard.exp || ''; cardCvv.value = u.payCard.cvv || ''; }
+  if (u.payBank) { bankName.value = u.payBank.name || ''; bankHolder.value = u.payBank.holder || ''; bankAccount.value = u.payBank.account || ''; }
+  if (u.verified?.email) { $('emailV').style.display = ''; $('emailU').style.display = 'none'; }
+  if (u.verified?.phone) { $('phoneV').style.display = ''; $('phoneU').style.display = 'none'; }
+  if (u.lat && u.lng) updateMap();
+}
+
+async function sendCode(type) { const r = await fetch('/api/verify/send', { method: 'POST', headers: H, body: JSON.stringify({ type }) }); const d = await r.json(); show(d.message, true); }
+async function checkCode() {
+  const r = await fetch('/api/verify/check', { method: 'POST', headers: H, body: JSON.stringify({ type: vtype.value, code: vcode.value }) });
+  const d = await r.json(); if (d.ok) { show('Verified!', true); load(); } else show(d.error, false);
+}
+function updateMap() { $('map').src = `https://www.openstreetmap.org/export/embed.html?bbox=${+lng.value - 0.02},${+lat.value - 0.02},${+lng.value + 0.02},${+lat.value + 0.02}&layer=mapnik&marker=${lat.value},${lng.value}`; }
+
+async function saveProfile() {
+  const r = await fetch('/api/profile', { method: 'PUT', headers: H, body: JSON.stringify({
+    name: name.value, phone: phone.value, address: address.value, lat: lat.value, lng: lng.value,
+    paymentType: paymentType.value, payName: payName.value, payNumber: payNumber.value }) });
+  const d = await r.json(); show(d.ok ? 'Saved!' : d.error, d.ok);
+}
+async function saveCard() {
+  await fetch('/api/profile', { method: 'PUT', headers: H, body: JSON.stringify({ payCard: { number: cardNumber.value, holder: cardHolder.value, exp: cardExp.value, cvv: cardCvv.value } }) });
+  show('Card saved!', true);
+}
+async function saveBank() {
+  await fetch('/api/profile', { method: 'PUT', headers: H, body: JSON.stringify({ payBank: { name: bankName.value, holder: bankHolder.value, account: bankAccount.value } }) });
+  show('Bank account saved!', true);
+}
+async function loadOrders() {
+  const r = await fetch('/api/myorders', { headers: H }); const orders = await r.json();
+  orows.innerHTML = orders.map(o => `<tr><td>${o.id}</td><td>${new Date(o.date).toLocaleDateString()}</td><td>${o.items.map(i => i.name + ' ×' + i.qty).join(', ')}</td><td>${o.payment || '-'}</td><td>৳${o.total}</td></tr>`).join('') || '<tr><td colspan="5">No orders yet</td></tr>';
+}
+load();
+</script>
+</body></html>

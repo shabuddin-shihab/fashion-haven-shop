@@ -1,0 +1,52 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Login — Fashion Haven</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; font-family: 'Poppins', sans-serif; }
+body { min-height: 100vh; background: linear-gradient(135deg, #0f172a, #1e293b); display: flex; align-items: center; justify-content: center; }
+.card { background: #fff; width: 400px; padding: 40px; border-radius: 20px; box-shadow: 0 20px 0 #00000030, 0 30px 60px rgba(0,0,0,.5), inset 0 2px 0 #fff; transform: perspective(1000px) rotateX(2deg); }
+h2 { color: #0f172a; margin-bottom: 6px; font-size: 28px; }
+p.sub { color: #94a3b8; margin-bottom: 24px; font-size: 14px; }
+label { font-size: 13px; color: #64748b; font-weight: 600; }
+input { width: 100%; padding: 13px; margin: 6px 0 16px; border: 2px solid #e2e8f0; border-radius: 10px; outline: none; transition: .2s; }
+input:focus { border-color: #c9a227; box-shadow: 0 0 0 4px rgba(201,162,39,.15); }
+.btn { width: 100%; background: linear-gradient(145deg, #c9a227, #a8841a); color: #fff; border: none; padding: 14px; border-radius: 12px; font-weight: 700; font-size: 16px; cursor: pointer; box-shadow: 0 5px 0 #7a6312, 0 8px 16px rgba(0,0,0,.25); transition: .1s; }
+.btn:active { transform: translateY(4px); box-shadow: 0 1px 0 #7a6312; }
+.err { background: #fee2e2; color: #b91c1c; padding: 10px; border-radius: 8px; margin-bottom: 14px; display: none; font-size: 14px; }
+a { color: #c9a227; text-decoration: none; font-weight: 600; }
+.links { margin-top: 18px; display: flex; justify-content: space-between; font-size: 14px; }
+.demo { margin-top: 20px; background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 10px; padding: 12px; font-size: 12px; color: #64748b; }
+</style></head>
+<body>
+<div class="card">
+  <h2>👋 Welcome Back</h2>
+  <p class="sub">Login to your Fashion Haven account</p>
+  <div class="err" id="err"></div>
+  <form id="f">
+    <label>Email Address</label>
+    <input id="email" type="email" placeholder="you@example.com" required>
+    <label>Password</label>
+    <input id="password" type="password" placeholder="••••••••" required>
+    <button class="btn">LOGIN</button>
+  </form>
+  <div class="links">
+    <a href="/register.html">Create Account</a>
+    <a href="/">← Back to Shop</a>
+  </div>
+  <div class="demo">💡 <b>Admin access:</b> Register an account with role "Admin" to get the admin panel.</div>
+</div>
+<script>
+f.onsubmit = async e => {
+  e.preventDefault();
+  const res = await fetch('/api/login', { method: 'POST', headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({ email: email.value, password: password.value }) });
+  const data = await res.json();
+  if (res.ok) {
+    localStorage.setItem('token', data.token);
+    localStorage.setItem('user', JSON.stringify(data.user));
+    location.href = (data.user.role === 'admin' || data.user.role === 'superadmin') ? '/admin.html' : '/';
+  } else {
+    err.textContent = data.error; err.style.display = 'block';
+  }
+};
+</script>
+</body></html>

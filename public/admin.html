@@ -1,0 +1,113 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Admin — Fashion Haven</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; font-family: 'Poppins', sans-serif; }
+body { background: #0f172a; color: #e2e8f0; display: flex; }
+.sidebar { width: 240px; min-height: 100vh; background: #1e293b; padding: 24px 16px; position: fixed; }
+.sidebar h2 { color: #c9a227; margin-bottom: 24px; font-size: 20px; }
+.sidebar a { display: block; color: #94a3b8; text-decoration: none; padding: 11px 14px; border-radius: 10px; margin-bottom: 6px; cursor: pointer; font-size: 14px; }
+.sidebar a:hover, .sidebar a.active { background: #c9a227; color: #fff; }
+.main { margin-left: 240px; padding: 34px; width: calc(100% - 240px); }
+.panel { display: none; background: #1e293b; border-radius: 16px; padding: 26px; box-shadow: 0 10px 30px rgba(0,0,0,.3); }
+.panel.active { display: block; }
+h3 { margin-bottom: 18px; color: #c9a227; }
+input, select, textarea { width: 100%; padding: 11px; margin-bottom: 12px; background: #0f172a; border: 1px solid #334155; border-radius: 10px; color: #fff; }
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+button { background: linear-gradient(145deg, #c9a227, #a8841a); color: #fff; border: none; padding: 11px 20px; border-radius: 10px; cursor: pointer; font-weight: 600; box-shadow: 0 4px 0 #7a6312; }
+button:active { transform: translateY(3px); box-shadow: none; }
+button.danger { background: #dc2626; box-shadow: 0 4px 0 #7f1d1d; }
+table { width: 100%; border-collapse: collapse; margin-top: 14px; }
+th, td { padding: 11px; border-bottom: 1px solid #334155; text-align: left; font-size: 14px; }
+th { color: #c9a227; }
+.stat-card { background: #0f172a; padding: 20px; border-radius: 12px; display: inline-block; margin: 6px; min-width: 150px; }
+.stat-card b { font-size: 28px; color: #c9a227; display: block; }
+.switch { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+.switch input { width: auto; margin: 0; transform: scale(1.4); accent-color: #c9a227; }
+.perm { display: inline-block; margin: 4px 8px 4px 0; }
+.perm input { width: auto; margin-right: 6px; accent-color: #c9a227; }
+@media (max-width: 800px) { .sidebar { position: static; width: 100%; min-height: auto; } body { flex-direction: column; } .main { margin-left: 0; width: 100%; } }
+</style></head>
+<body>
+<div class="sidebar">
+  <h2>⚙️ ADMIN</h2>
+  <a class="active" onclick="show('dashboard', this)">📊 Dashboard</a>
+  <a onclick="show('products', this)">🛍️ Products</a>
+  <a onclick="show('orders', this)">📦 Orders</a>
+  <a onclick="show('content', this)">🎨 Website Design</a>
+  <a onclick="show('payments', this)">💳 Payments</a>
+  <a onclick="show('plugins', this)">🧩 Plugins</a>
+  <a onclick="show('settings', this)">🔐 Settings</a>
+  <a href="/">🏠 Back to Shop</a>
+</div>
+<div class="main">
+
+<div class="panel active" id="dashboard"><h3>Dashboard</h3><div id="stats"></div></div>
+
+<div class="panel" id="products"><h3>Add Product</h3>
+  <form id="pf">
+    <div class="row"><input id="pname" placeholder="Product Name" required><input id="pprice" type="number" placeholder="Price (৳)" required></div>
+    <div class="row">
+      <select id="pcategory"><option>Panjabi</option><option>Sharee</option><option>Kurti</option><option>T-Shirt</option><option>Jacket</option><option>Shirt</option><option>Frock</option><option>Accessories</option><option>Other</option></select>
+      <select id="pgender"><option>Men</option><option>Women</option><option>Kids</option><option>Old</option></select>
+    </div>
+    <div class="row"><input id="pimage" placeholder="Image URL (optional)"><input id="pstock" type="number" placeholder="Stock"></div>
+    <label style="color:#94a3b8;font-size:13px">📷 Or upload product picture:</label>
+    <input type="file" id="pimageFile" accept="image/*" onchange="previewImg()">
+    <img id="ppreview" style="width:90px;height:90px;object-fit:cover;border-radius:10px;display:none;margin:8px 0">
+    <div class="row"><input id="pdiscount" type="number" placeholder="Discount %" value="0"><input id="pbadge" placeholder="Badge (New/Sale...)"></div>
+    <textarea id="pdesc" placeholder="Description"></textarea>
+    <button>➕ Add Product</button>
+  </form>
+  <table><thead><tr><th>Name</th><th>Price</th><th>Discount %</th><th>Category</th><th>Stock</th><th></th></tr></thead><tbody id="prows"></tbody></table>
+</div>
+
+<div class="panel" id="orders"><h3>Orders</h3>
+  <table><thead><tr><th>ID</th><th>Items</th><th>Payment</th><th>Total</th><th>Date</th></tr></thead><tbody id="orows"></tbody></table>
+</div>
+
+<div class="panel" id="content"><h3>Edit Website Design & Content</h3>
+  <form id="cf">
+    <input id="cSiteName" placeholder="Website Name">
+    <input id="cHeroTitle" placeholder="Hero Title">
+    <input id="cHeroSubtitle" placeholder="Hero Subtitle">
+    <input id="cHeroImage" placeholder="Hero Image URL">
+    <textarea id="cAbout" placeholder="About Us Text"></textarea>
+    <input id="cVideoUrl" placeholder="Video URL (mp4)">
+    <input id="cUpcomingTitle" placeholder="Upcoming Section Text">
+    <div class="row"><input id="cPhone" placeholder="Phone"><input id="cAddress" placeholder="Address"></div>
+    <button>💾 Save Changes</button>
+  </form>
+</div>
+
+<div class="panel" id="payments"><h3>Payment Methods</h3>
+  <form id="payf" style="display:flex;gap:10px">
+    <input id="payName" placeholder="Method Name (e.g. bKash)" required>
+    <input id="payType" placeholder="Type (Mobile Banking / Card...)">
+    <button>➕ Add</button>
+  </form>
+  <table><thead><tr><th>Name</th><th>Type</th><th></th></tr></thead><tbody id="payrows"></tbody></table>
+</div>
+
+<div class="panel" id="plugins"><h3>Plugins — Toggle Website Sections</h3>
+  <div class="switch"><input type="checkbox" id="plHero"> Hero Banner</div>
+  <div class="switch"><input type="checkbox" id="plStats"> Stats Section</div>
+  <div class="switch"><input type="checkbox" id="plVideo"> Video Section</div>
+  <div class="switch"><input type="checkbox" id="plUpcoming"> Upcoming Section</div>
+  <div class="switch"><input type="checkbox" id="plCountdown"> Countdown Timer</div>
+  <div class="switch"><input type="checkbox" id="plRatings"> Product Ratings (Stars)</div>
+  <div class="switch"><input type="checkbox" id="plBadges"> Product Badges (New/Sale)</div>
+  <div class="switch"><input type="checkbox" id="plSidebarLinks"> Footer Branch Links</div>
+  <button onclick="savePlugins()">💾 Save Plugins</button>
+</div>
+
+<div class="panel" id="settings"><h3>Settings — Super Admin</h3>
+  <h4 style="margin:14px 0 8px">Users & Roles</h4>
+  <table><thead><tr><th>Name</th><th>Email</th><th>Role</th><th></th></tr></thead><tbody id="urows"></tbody></table>
+  <h4 style="margin:20px 0 8px">Role Permissions</h4>
+  <div id="rolesBox"></div>
+  <button onclick="saveRoles()">💾 Save Permissions</button>
+</div>
+
+</div>
+<script src="admin.js"></script>
+</body></html>

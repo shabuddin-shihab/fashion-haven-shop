@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FASHION HAVEN — Premium Garments</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="topbar">
+  <span id="topPhone">📞 +880 1700-000000</span>
+  <span id="topAddress">📍 Mirpur, Dhaka, Bangladesh</span>
+  <span>✉️ info@fashionhaven.com</span>
+</div>
+
+<nav>
+  <div class="logo" id="siteNameLogo"><span id="siteName">FASHION HAVEN</span></div>
+  <div class="menu">
+    <a href="#home">Home</a>
+    <a href="#about">About Us</a>
+    <div class="menu-item">
+      <a href="#shop">Product ▾</a>
+      <div class="dropdown" id="catDropdown">
+        <a onclick="setFilter('All', document.querySelector('.filters button'))" href="#shop">All Products</a>
+        <a onclick="setFilter('Men')" href="#shop">Men</a>
+        <a onclick="setFilter('Women')" href="#shop">Women</a>
+        <a onclick="setFilter('Kids')" href="#shop">Kids</a>
+        <a onclick="setFilter('Old')" href="#shop">Senior</a>
+        <a onclick="setFilter('Panjabi')" href="#shop">Panjabi</a>
+        <a onclick="setFilter('Sharee')" href="#shop">Sharee</a>
+        <a onclick="setFilter('Kurti')" href="#shop">Kurti</a>
+        <a onclick="setFilter('T-Shirt')" href="#shop">T-Shirt</a>
+      </div>
+    </div>
+    <a href="#video">Video</a>
+    <a href="#upcoming">Upcoming</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <div class="search-box">
+    <input id="searchInput" placeholder="Search products...">
+    <button onclick="renderProducts()">🔍</button>
+  </div>
+  <div class="nav-icons">
+    <a onclick="toggleCart()">🛒 <span class="badge" id="cartCount">0</span></a>
+    <div class="menu-item" id="profileMenu">
+      <a id="profileAnchor"><img id="navAvatar" src="https://ui-avatars.com/api/?name=User&background=c9a227&color=fff&size=64" style="width:34px;height:34px;border-radius:50%;object-fit:cover;border:2px solid #c9a227;vertical-align:middle"> ▾</a>
+      <div class="dropdown" id="profileDrop"></div>
+    </div>
+  </div>
+</nav>
+
+<header class="hero" id="home">
+  <h1>Style for Everyone</h1>
+  <p>Premium garments for Men • Women • Kids • and All Ages</p>
+  <a class="btn" href="#shop">Shop Now</a>
+</header>
+
+<section>
+  <div class="stats">
+    <div><h3>500+</h3><p>Products</p></div>
+    <div><h3>50k+</h3><p>Happy Customers</p></div>
+    <div><h3>15+</h3><p>Years Experience</p></div>
+    <div><h3>24/7</h3><p>Support</p></div>
+  </div>
+</section>
+
+<section id="about">
+  <h2>About Us</h2>
+  <p>Fashion Haven is a premium garment brand dedicated to delivering quality, comfort, and style. From everyday wear to festive collections, we serve men, women, kids, and people of all ages with love and care.</p>
+</section>
+
+<section id="shop">
+  <h2>Our Collection</h2>
+  <div class="filters">
+    <button class="active" onclick="setFilter('All', this)">All</button>
+    <button onclick="setFilter('Men', this)">Men</button>
+    <button onclick="setFilter('Women', this)">Women</button>
+    <button onclick="setFilter('Kids', this)">Kids</button>
+    <button onclick="setFilter('Old', this)">Senior</button>
+    <button onclick="setFilter('Panjabi', this)">Panjabi</button>
+    <button onclick="setFilter('Sharee', this)">Sharee</button>
+    <button onclick="setFilter('Kurti', this)">Kurti</button>
+    <button onclick="setFilter('T-Shirt', this)">T-Shirt</button>
+  </div>
+  <div id="products" class="grid"></div>
+</section>
+
+<section id="video">
+  <h2>Watch Our Brand Story</h2>
+  <video id="brandVideo" controls poster="https://images.unsplash.com/photo-1445205170230-053b83016050?w=1200">
+    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+  </video>
+</section>
+
+<section id="upcoming">
+  <div class="upcoming">
+    <h2>Upcoming Collection Launch</h2>
+    <p>Exclusive Eid Collection 2026 — Stay tuned!</p>
+    <div class="countdown" id="countdown"></div>
+  </div>
+</section>
+
+<footer id="contact">
+  <div class="f-grid">
+    <div>
+      <h4>FASHION HAVEN</h4>
+      <p>Your trusted destination for premium garments since 2010.</p>
+      <div class="socials">
+        <a href="https://facebook.com" target="_blank"><svg viewBox="0 0 24 24"><path d="M13 22v-8h3l.5-4H13V7.5c0-1.1.3-1.5 1.6-1.5H17V2.2C16.4 2.1 15.3 2 14.1 2 11.1 2 9 3.7 9 6.8V10H6v4h3v8h4z"/></svg></a>
+        <a href="https://linkedin.com" target="_blank"><svg viewBox="0 0 24 24"><path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.24 8.16h4.5V23H.24V8.16zM8.52 8.16h4.31v2.03h.06c.6-1.14 2.07-2.34 4.26-2.34 4.56 0 5.4 3 5.4 6.9V23h-4.5v-7.2c0-1.72-.03-3.94-2.4-3.94-2.4 0-2.77 1.88-2.77 3.82V23h-4.35V8.16z"/></svg></a>
+        <a href="https://instagram.com" target="_blank"><svg viewBox="0 0 24 24"><path d="M12 2.2c3.2 0 3.58.01 4.85.07 3.25.15 4.77 1.69 4.92 4.92.06 1.27.07 1.65.07 4.81s-.01 3.54-.07 4.81c-.15 3.23-1.66 4.77-4.92 4.92-1.27.06-1.64.07-4.85.07s-3.58-.01-4.85-.07c-3.26-.15-4.77-1.7-4.92-4.92C2.21 15.54 2.2 15.16 2.2 12s.01-3.54.07-4.81C2.42 3.96 3.94 2.42 7.15 2.27 8.42 2.21 8.8 2.2 12 2.2zm0 3.68a6.12 6.12 0 100 12.24 6.12 6.12 0 000-12.24zm0 10.1a3.98 3.98 0 110-7.96 3.98 3.98 0 010 7.96zm6.37-10.37a1.43 1.43 0 100 2.86 1.43 1.43 0 000-2.86z"/></svg></a>
+        <a href="https://tiktok.com" target="_blank"><svg viewBox="0 0 24 24"><path d="M19.6 6.3a5.3 5.3 0 01-3.2-1.1v9.3a5.4 5.4 0 11-5.4-5.4c.3 0 .6 0 .9.1v2.7a2.7 2.7 0 102 2.6V0h2.6a5.3 5.3 0 005 5.3v1z"/></svg></a>
+        <a href="https://youtube.com" target="_blank"><svg viewBox="0 0 24 24"><path d="M23 7.2s-.2-1.6-.9-2.3c-.9-.9-1.9-.9-2.4-1C16.6 3.6 12 3.6 12 3.6s-4.6 0-7.7.3c-.5.1-1.5.1-2.4 1-.7.7-.9 2.3-.9 2.3S.8 9.1.8 11v1.8c0 1.9.2 3.8.2 3.8s.2 1.6.9 2.3c.9.9 2.1.9 2.6 1 1.9.2 7.5.3 7.5.3s4.6 0 7.7-.3c.5-.1 1.5-.1 2.4-1 .7-.7.9-2.3.9-2.3s.2-1.9.2-3.8V11c0-1.9-.2-3.8-.2-3.8zM9.9 15.1V8.4l6.3 3.4-6.3 3.3z"/></svg></a>
+      </div>
+    </div>
+    <div>
+      <h4>Quick Links</h4>
+      <a href="#home">Home</a><a href="#about">About Us</a><a href="#shop">Categories</a><a href="#upcoming">Upcoming</a>
+    </div>
+    <div>
+      <h4>Contact</h4>
+      <a href="#">📍 House 12, Road 5, Mirpur 10, Dhaka</a>
+      <a href="#">📞 +880 1700-000000</a>
+      <a href="#">✉️ info@fashionhaven.com</a>
+      <a href="#">🕐 Sat–Thu: 9AM – 10PM</a>
+    </div>
+    <div>
+      <h4>Our Branches</h4>
+      <a href="#">Dhaka — Mirpur 10</a>
+      <a href="#">Chittagong — Agrabad</a>
+      <a href="#">Sylhet — Zindabazar</a>
+      <a href="#">Rajshahi — Shaheb Bazar</a>
+    </div>
+  </div>
+  <p class="copyright">© 2026 Fashion Haven. All rights reserved.</p>
+</footer>
+
+<div class="drawer" id="cartDrawer">
+  <h3>Your Cart <a onclick="toggleCart()" style="float:right;cursor:pointer">✕</a></h3>
+  <div id="cartItems"></div>
+  <p><b>Total: ৳<span id="total">0</span></b></p>
+  <button onclick="checkout()" style="width:100%;margin-top:10px">Checkout</button>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
